@@ -7,9 +7,28 @@ public enum Canton {
   BE,
   FR,
   GE,
-  SH;
+  SH,
+  VD,
+  VS,
+  TG,
+  ZH,
+  TI,
+  SO,
+  SZ,
+  LU,
+  JU,
+  GR,
+  GL,
+  AR,
+  AI,
+  AG,
+  BL,
+  BS,
+  OW,
+  NW,
+  UR;
 
-  // TODO: Ajouter les autres cantons..
+  // TODO: Ajouter les autres cantons.. (il y en a 26 en tout) => Fait
 
   public static Canton fromValue(String value) {
     return Stream.of(Canton.values())
