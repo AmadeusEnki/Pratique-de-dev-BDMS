@@ -14,6 +14,9 @@ public class AllocataireMapper extends Mapper {
   private static final String QUERY_FIND_ALL = "SELECT NOM,PRENOM,NO_AVS FROM ALLOCATAIRES";
   private static final String QUERY_FIND_WHERE_NOM_LIKE = "SELECT NOM,PRENOM,NO_AVS FROM ALLOCATAIRES WHERE NOM LIKE ?";
   private static final String QUERY_FIND_WHERE_NUMERO = "SELECT NO_AVS, NOM, PRENOM FROM ALLOCATAIRES WHERE NUMERO=?";
+  private static final String INSERT_ALLOCATAIRE = "INSERT INTO ALLOCATAIRES (NO_AVS, NOM, PRENOM) VALUES (?, ?, ?)";
+  private static final String UPDATE_ALLOCATAIRE = "UPDATE ALLOCATAIRES SET NOM=?, PRENOM=? WHERE NO_AVS=?";
+  private static final String DELETE_ALLOCATAIRE = "DELETE FROM ALLOCATAIRES WHERE NO_AVS = ?";
 
   public List<Allocataire> findAll(String likeNom) {
     System.out.println("findAll() " + likeNom);
@@ -67,6 +70,43 @@ public class AllocataireMapper extends Mapper {
           resultSet.getString(2), resultSet.getString(3));
     } catch (SQLException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  public void insert(Allocataire allocataire) {
+    try (Connection connection = activeJDBCConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ALLOCATAIRE)) {
+      preparedStatement.setString(1, allocataire.getNoAVS().toString());
+      preparedStatement.setString(2, allocataire.getNom());
+      preparedStatement.setString(3, allocataire.getPrenom());
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void update(Allocataire allocataire) {
+    try (Connection connection = activeJDBCConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ALLOCATAIRE)) {
+      preparedStatement.setString(1, allocataire.getNom());
+      preparedStatement.setString(2, allocataire.getPrenom());
+      preparedStatement.setString(3, allocataire.getNoAVS().toString());
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void delete(NoAVS noAVS) {
+    try (Connection connection = activeJDBCConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ALLOCATAIRE)) {
+      preparedStatement.setString(1, noAVS.toString());
+      int affectedRows = preparedStatement.executeUpdate();
+      if (affectedRows == 0) {
+        throw new SQLException("La suppression de l'allocataire a échoué, aucun ligne affectée.");
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException("Erreur lors de la suppression de l'allocataire", e);
     }
   }
 }
