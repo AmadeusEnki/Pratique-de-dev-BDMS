@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 public class Database {
   /** Pool de connections JDBC */
-  private static DataSource dataSource;
+  private static HikariDataSource dataSource;
 
   /** Connection JDBC active par utilisateur/thread (ThreadLocal) */
   private static final ThreadLocal<Connection> connection = new ThreadLocal<>();
@@ -19,7 +19,7 @@ public class Database {
    * active.
    * @return Connection JDBC active
    */
-  static Connection activeJDBCConnection() {
+  public static Connection activeJDBCConnection() {
     if(connection.get() == null) {
       throw new RuntimeException("Pas de connection JDBC active");
     }
@@ -67,5 +67,22 @@ public class Database {
     config.setDriverClassName("org.h2.Driver");
     dataSource = new HikariDataSource(config);
     System.out.println("Datasource initialized");
+  }
+
+  /**
+   * Fermeture du pool de connections.
+   */
+  public void stop() {
+    if (dataSource != null) {
+      dataSource.close();
+      System.out.println("Datasource closed");
+    }
+  }
+
+  /**
+   * Initialisation explicite de la connexion JDBC.
+   */
+  public static void initConnection() throws SQLException {
+    connection.set(dataSource.getConnection());
   }
 }

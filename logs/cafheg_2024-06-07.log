@@ -1,0 +1,10 @@
+2024-06-07 17:24:21,778 INFO  [main] org.springframework.boot.StartupInfoLogger: Starting Application using Java 19 on DESKTOP-BI6U2CG with PID 21124 (C:\Users\christophe\IdeaProjects\Pratique-de-dev-BDMS\out\production\main started by christophe in C:\Users\christophe\IdeaProjects\Pratique-de-dev-BDMS)
+2024-06-07 17:24:21,779 INFO  [main] org.springframework.boot.SpringApplication: No active profile set, falling back to default profiles: default
+2024-06-07 17:24:24,592 INFO  [main] org.springframework.boot.StartupInfoLogger: Started Application in 3.159 seconds (JVM running for 4.428)
+2024-06-07 17:26:37,401 INFO  [http-nio-8080-exec-7] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:39,507 INFO  [http-nio-8080-exec-9] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:41,906 INFO  [http-nio-8080-exec-1] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:43,009 INFO  [http-nio-8080-exec-3] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:43,975 INFO  [http-nio-8080-exec-5] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:44,965 INFO  [http-nio-8080-exec-7] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 17:26:45,866 INFO  [http-nio-8080-exec-9] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
