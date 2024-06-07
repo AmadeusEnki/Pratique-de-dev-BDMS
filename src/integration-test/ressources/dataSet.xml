@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <Allocataire noAVS="123456789" nom="Doe" prenom="John"/>
-    <Allocataire noAVS="987654321" nom="Doe" prenom="Jane"/>
-    <Allocataire noAVS="123936444" nom="John" prenom="Connor"/>
+    <ALLOCATAIRES NUMERO="1" NO_AVS="756.1234.5678.90" NOM="Doe" PRENOM="John" />
+    <ALLOCATAIRES NUMERO="2" NO_AVS="756.9876.5432.10" NOM="Smith" PRENOM="Jane" />
+    <ALLOCATAIRES NUMERO="3" NO_AVS="756.1111.2222.33" NOM="Brown" PRENOM="Charlie" />
 </dataset>

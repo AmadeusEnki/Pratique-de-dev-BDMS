@@ -1,18 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
-        </Console>
+<configuration>
+    <property name="LOGS_PATH" value="./logs"/>
+    <timestamp key="timestamp" datePattern="yyyy-MM-dd"/>
+    <!-- Appender for error level logs in services package -->
+    <appender name="RollingFileAppenderInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_PATH}/cafheg_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level [%t] %C{1.}: %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
 
-        <File name="File" fileName="logs/app.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
-        </File>
-    </Appenders>
-    <Loggers>
-        <Root level="info">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Root>
-    </Loggers>
-</Configuration>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOGS_PATH}/err.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level [%t] %C{1.} : %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}) : %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <logger name="ch.hearc.cafheg.infrastructure" level="info" additivity="false">
+        <appender-ref ref="RollingFileAppenderInfo"/>
+    </logger>
+    <logger name="ch" level="error" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="ch" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+
+    </logger>
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+
+</configuration>
