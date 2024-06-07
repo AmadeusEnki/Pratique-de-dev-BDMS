@@ -20,7 +20,7 @@ Nous suivrons donc la méthodologie TDD pour garantir la couverture en tests du 
 ## Installation
 
 ```sh
-git clone 
+git clone https://github.com/AmadeusEnki/Pratique-de-dev-BDMS.git
 ```
 
 ## Utilisation
