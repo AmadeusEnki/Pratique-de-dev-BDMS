@@ -8,3 +8,17 @@
 2024-06-07 17:26:43,975 INFO  [http-nio-8080-exec-5] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
 2024-06-07 17:26:44,965 INFO  [http-nio-8080-exec-7] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
 2024-06-07 17:26:45,866 INFO  [http-nio-8080-exec-9] ch.hearc.cafheg.infrastructure.api.RESTController: Requête reçue pour récupérer la somme des allocations de naissance pour l'année : 2022
+2024-06-07 18:07:22,127 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:07:22,481 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:07:22,584 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:07:22,596 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:07:47,905 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:07:48,138 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:09:31,129 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:09:31,407 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:09:31,553 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:09:31,563 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:10:04,923 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:10:05,295 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé
+2024-06-07 18:10:05,475 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Initialisation du pool de connections
+2024-06-07 18:10:05,488 INFO  [main] ch.hearc.cafheg.infrastructure.persistance.Database: Pool de connections initialisé

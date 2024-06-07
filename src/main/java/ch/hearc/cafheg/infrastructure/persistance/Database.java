@@ -58,7 +58,7 @@ public class Database {
     }
   }
 
-  DataSource dataSource() {
+  public static DataSource dataSource() {
     return dataSource;
   }
 

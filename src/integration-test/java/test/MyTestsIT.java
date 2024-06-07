@@ -5,47 +5,40 @@ import ch.hearc.cafheg.business.allocations.NoAVS;
 import ch.hearc.cafheg.business.allocations.AllocationService;
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
 import ch.hearc.cafheg.infrastructure.persistance.AllocationMapper;
+import ch.hearc.cafheg.infrastructure.persistance.Database;
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MyTestsIT {
 
-    private IDatabaseConnection connection;
+    private DatabaseDataSourceConnection connection;
     private ITable expectedTable;
     private ITable actualData;
     private Logger logger = LoggerFactory.getLogger(MyTestsIT.class);
@@ -61,6 +54,9 @@ public class MyTestsIT {
 
     private IDataSet dataSet;
 
+    @Captor
+    private ArgumentCaptor<Allocataire> allocataireCaptor;
+
     @BeforeEach
     public void setup() {
         logger.debug("Configuration en cours");
@@ -75,12 +71,23 @@ public class MyTestsIT {
                 logger.debug("Jeu de données chargé");
             }
 
+            // Initialize the database connection
+            Database database = new Database();
+            database.start(); // Make sure to initialize the database
+            DataSource dataSource = Database.dataSource();
+            connection = new DatabaseDataSourceConnection(dataSource);
+            DatabaseConfig config = connection.getConfig();
+            config.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
+
             logger.info("Configuration terminée");
         } catch (DatabaseUnitException | FileNotFoundException e) {
             logger.error("Erreur lors de la configuration", e);
             throw new RuntimeException(e);
         } catch (IOException e) {
             logger.error("Erreur lors de la lecture du fichier de jeu de données", e);
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'initialisation de la base de données", e);
             throw new RuntimeException(e);
         }
     }
@@ -135,8 +142,13 @@ public class MyTestsIT {
             // Appeler la méthode de service
             allocationService.updateAllocataire(3, "Doe", "John");
 
-            // Vérifier que la méthode de mise à jour a été appelée
-            verify(allocataireMapper, times(1)).update(allocataire);
+            // Capturer l'argument passé à la méthode update
+            verify(allocataireMapper).update(allocataireCaptor.capture());
+            Allocataire updatedAllocataire = allocataireCaptor.getValue();
+
+            // Vérifier que les valeurs mises à jour sont correctes
+            assertEquals("Doe", updatedAllocataire.getNom());
+            assertEquals("John", updatedAllocataire.getPrenom());
 
             // Charger le jeu de données attendu à partir du fichier XML
             ClassLoader classLoader = getClass().getClassLoader();

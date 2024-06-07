@@ -1,1 +1,5 @@
 2024-06-07 17:39:36,926 ERROR [main] ch.hearc.cafheg.business.allocations.AllocationService : Allocataire non trouvé pour le numéro AVS : 3
+2024-06-07 18:01:33,363 ERROR [main] ch.hearc.cafheg.business.allocations.AllocationService : Allocataire non trouvé pour le numéro AVS : 3
+2024-06-07 18:07:22,599 ERROR [main] ch.hearc.cafheg.business.allocations.AllocationService : Allocataire non trouvé pour le numéro AVS : 3
+2024-06-07 18:09:31,564 ERROR [main] ch.hearc.cafheg.business.allocations.AllocationService : Allocataire non trouvé pour le numéro AVS : 3
+2024-06-07 18:10:05,490 ERROR [main] ch.hearc.cafheg.business.allocations.AllocationService : Allocataire non trouvé pour le numéro AVS : 3
