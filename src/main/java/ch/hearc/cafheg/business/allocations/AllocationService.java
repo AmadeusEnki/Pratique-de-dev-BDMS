@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -144,14 +143,7 @@ public class AllocationService {
    * @return Le parent ayant droit à l'allocation basé sur les salaires.
    */
   private String compareSalaries(Famille famille) {
-    BigDecimal salaryThreshold = BigDecimal.valueOf(2000);
     if (famille.isParent1EstSalarie() || famille.isParent2EstSalarie()) {
-      if (famille.getParent1Salaire().compareTo(salaryThreshold) < 0) {
-        return PARENT_1;
-      }
-      if (famille.getParent2Salaire().compareTo(salaryThreshold) < 0) {
-        return PARENT_2;
-      }
       return famille.getParent1Salaire().compareTo(famille.getParent2Salaire()) > 0 ? PARENT_1 : PARENT_2;
     }
 
