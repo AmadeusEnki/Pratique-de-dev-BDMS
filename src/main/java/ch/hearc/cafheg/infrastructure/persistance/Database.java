@@ -6,8 +6,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Supplier;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Database {
+  private static final Logger logger = LoggerFactory.getLogger(Database.class);
+
   /** Pool de connections JDBC */
   private static HikariDataSource dataSource;
 
@@ -20,7 +24,7 @@ public class Database {
    * @return Connection JDBC active
    */
   public static Connection activeJDBCConnection() {
-    if(connection.get() == null) {
+    if (connection.get() == null) {
       throw new RuntimeException("Pas de connection JDBC active");
     }
     return connection.get();
@@ -33,21 +37,23 @@ public class Database {
    * @return Le résultat de l'éxécution de la fonction
    */
   public static <T> T inTransaction(Supplier<T> inTransaction) {
-    System.out.println("inTransaction#start");
+    logger.debug("Début de la transaction");
     try {
-      System.out.println("inTransaction#getConnection");
+      logger.debug("Obtention de la connection");
       connection.set(dataSource.getConnection());
       return inTransaction.get();
     } catch (Exception e) {
+      logger.error("Erreur pendant l'exécution de la transaction", e);
       throw new RuntimeException(e);
     } finally {
       try {
-        System.out.println("inTransaction#closeConnection");
+        logger.debug("Fermeture de la connection");
         connection.get().close();
       } catch (SQLException e) {
+        logger.error("Erreur lors de la fermeture de la connection", e);
         throw new RuntimeException(e);
       }
-      System.out.println("inTransaction#end");
+      logger.debug("Fin de la transaction");
       connection.remove();
     }
   }
@@ -60,13 +66,13 @@ public class Database {
    * Initialisation du pool de connections.
    */
   public void start() {
-    System.out.println("Initializing datasource");
+    logger.info("Initialisation du pool de connections");
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl("jdbc:h2:mem:sample");
     config.setMaximumPoolSize(20);
     config.setDriverClassName("org.h2.Driver");
     dataSource = new HikariDataSource(config);
-    System.out.println("Datasource initialized");
+    logger.info("Pool de connections initialisé");
   }
 
   /**
@@ -75,7 +81,7 @@ public class Database {
   public void stop() {
     if (dataSource != null) {
       dataSource.close();
-      System.out.println("Datasource closed");
+      logger.info("Pool de connections fermé");
     }
   }
 
