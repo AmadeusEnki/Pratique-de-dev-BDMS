@@ -1,0 +1,5 @@
+<dataset>
+    <Allocataire noAVS="123456789" nom="Doe" prenom="John"/>
+    <Allocataire noAVS="987654321" nom="Doe" prenom="Jane"/>
+    <Allocataire noAVS="123936444" nom="John" prenom="Connor"/>
+</dataset>
