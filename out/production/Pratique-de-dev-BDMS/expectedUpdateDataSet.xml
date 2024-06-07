@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <ALLOCATAIRES NUMERO="1" NO_AVS="756.1234.5678.90" NOM="Doe" PRENOM="John" />
+    <ALLOCATAIRES NUMERO="2" NO_AVS="756.9876.5432.10" NOM="Smith" PRENOM="Jane" />
+    <ALLOCATAIRES NUMERO="3" NO_AVS="756.1111.2222.33" NOM="Doe" PRENOM="John" />
+</dataset>
