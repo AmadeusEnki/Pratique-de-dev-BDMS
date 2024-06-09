@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.*;
 
 @RestController
@@ -39,7 +40,7 @@ public class RESTController {
    * Requiert un JSON avec les informations sur la famille.
    */
   @PostMapping("/droits/quel-parent")
-  public String getParentDroitAllocation(@RequestBody Famille params) {
+  public String getParentDroitAllocation(@RequestBody Famille params) throws SQLException {
     Logger.info("Requête reçue pour déterminer le parent ayant droit à l'allocation avec les paramètres : {}", params);
     return inTransaction(() -> allocationService.getParentDroitAllocation(params));
   }
@@ -49,7 +50,7 @@ public class RESTController {
    * Si le paramètre 'startsWith' n'est pas fourni, retourne tous les allocataires.
    */
   @GetMapping("/allocataires")
-  public List<Allocataire> allocataires(@RequestParam(value = "startsWith", required = false) String start) {
+  public List<Allocataire> allocataires(@RequestParam(value = "startsWith", required = false) String start) throws SQLException {
     Logger.info("Requête reçue pour récupérer tous les allocataires commençant par : {}", start);
     return inTransaction(() -> allocationService.findAllAllocataires(start));
   }
@@ -58,7 +59,7 @@ public class RESTController {
    * Endpoint pour récupérer toutes les allocations actuelles.
    */
   @GetMapping("/allocations")
-  public List<Allocation> allocations() {
+  public List<Allocation> allocations() throws SQLException {
     Logger.info("Requête reçue pour récupérer toutes les allocations actuelles.");
     return inTransaction(allocationService::findAllocationsActuelles);
   }
@@ -67,7 +68,7 @@ public class RESTController {
    * Endpoint pour récupérer la somme des allocations pour une année donnée.
    */
   @GetMapping("/allocations/{year}/somme")
-  public BigDecimal sommeAs(@PathVariable("year") int year) {
+  public BigDecimal sommeAs(@PathVariable("year") int year) throws SQLException {
     Logger.info("Requête reçue pour récupérer la somme des allocations pour l'année : {}", year);
     return inTransaction(() -> versementService.findSommeAllocationParAnnee(year).getValue());
   }
@@ -76,7 +77,7 @@ public class RESTController {
    * Endpoint pour récupérer la somme des allocations de naissance pour une année donnée.
    */
   @GetMapping("/allocations-naissances/{year}/somme")
-  public BigDecimal sommeAns(@PathVariable("year") int year) {
+  public BigDecimal sommeAns(@PathVariable("year") int year) throws SQLException {
     Logger.info("Requête reçue pour récupérer la somme des allocations de naissance pour l'année : {}", year);
     return inTransaction(() -> versementService.findSommeAllocationNaissanceParAnnee(year).getValue());
   }
@@ -86,7 +87,7 @@ public class RESTController {
    * Le PDF est retourné en tant que tableau de bytes.
    */
   @GetMapping(value = "/allocataires/{allocataireId}/allocations", produces = MediaType.APPLICATION_PDF_VALUE)
-  public byte[] pdfAllocations(@PathVariable("allocataireId") int allocataireId) {
+  public byte[] pdfAllocations(@PathVariable("allocataireId") int allocataireId) throws SQLException {
     Logger.info("Requête reçue pour générer le PDF des allocations pour l'allocataire ID : {}", allocataireId);
     return inTransaction(() -> versementService.exportPDFAllocataire(allocataireId));
   }
@@ -96,7 +97,7 @@ public class RESTController {
    * Le PDF est retourné en tant que tableau de bytes.
    */
   @GetMapping(value = "/allocataires/{allocataireId}/versements", produces = MediaType.APPLICATION_PDF_VALUE)
-  public byte[] pdfVersements(@PathVariable("allocataireId") int allocataireId) {
+  public byte[] pdfVersements(@PathVariable("allocataireId") int allocataireId) throws SQLException {
     Logger.info("Requête reçue pour générer le PDF des versements pour l'allocataire ID : {}", allocataireId);
     return inTransaction(() -> versementService.exportPDFVersements(allocataireId));
   }
@@ -106,7 +107,7 @@ public class RESTController {
    * Requiert un JSON avec les nouvelles valeurs pour 'nom' et 'prenom'.
    */
   @PutMapping("/allocataire/{id}")
-  public void updateAllocataire(@PathVariable("id") int id, @RequestBody Map<String, String> params) {
+  public void updateAllocataire(@PathVariable("id") int id, @RequestBody Map<String, String> params) throws SQLException {
     String newNom = params.get("nom");
     String newPrenom = params.get("prenom");
     Logger.info("Requête reçue pour mettre à jour l'allocataire avec l'ID : {}. Nouveau nom : {}, nouveau prénom : {}", id, newNom, newPrenom);
@@ -121,7 +122,7 @@ public class RESTController {
    * Endpoint pour supprimer un allocataire.
    */
   @DeleteMapping("/allocataire/{id}")
-  public void deleteAllocataire(@PathVariable("id") int id) {
+  public void deleteAllocataire(@PathVariable("id") int id) throws SQLException {
     Logger.info("Requête reçue pour supprimer l'allocataire avec l'ID : {}", id);
     inTransaction(() -> {
       allocationService.deleteAllocataire(id);

@@ -9,13 +9,16 @@ Projet résultant du cours 62-61.2 PRATIQUES DE DÉVELOPPEMENT dont les objectif
 - Le logging
 - La gestion des exceptions
 
-Nous suivrons donc la méthodologie TDD pour garantir la couverture en tests du projet et nous élaborerons un système de logs pour capturer les erreurs et les corriger par la suite.
+Nous suivons donc la méthodologie TDD pour garantir la couverture en tests du projet et nous élaborons un système de logs pour capturer les erreurs et les corriger par la suite. Le projet est conçu pour être robuste, maintenable et facilement extensible grâce à une couverture de test complète et une gestion efficace des exceptions.
 
 ## Technologies
 
-- Java : Language de programmation
-- JUnit : Framework de tests
-- LSF4J : Façade pour les frameworks de logs
+- Java : Langage de programmation principal.
+- JUnit : Framework de tests pour écrire et exécuter des tests unitaires et d'intégration.
+- LSF4J : Façade pour les frameworks de logs, permettant une intégration flexible avec différentes implémentations de logging.
+
+## Prérequis
+- **Java 11** 
 
 ## Installation
 
@@ -31,16 +34,11 @@ Utilisez des commandes `curl` pour intéragir avec l'api REST.
 - `PUT`: Mettre à jour des informations
 - `DELETE` : Supprimer des informations
 
-#### Exemple de commande
-
-**Récupérer la liste des allocataires**
-
-```sh
-curl -X GET "http://localhost:8080/api/allocataires" -H "accept: application/json"
-```
-
 ### tests
 Pour lancer les test unitaires et d'intégration, dirigez-vous dans le répertoire des tests et éxécutez-les à l'aide de votre IDE.
+
+## Améliorations possibles
+Malheureusement, l'équipe n'est pas parvenu à implémenter les tests d'intégration. Il serait donc judicieux de les implémenter pour garantir une couverture en tests complète.
 
 ## Équipe BDMS
 
