@@ -22,14 +22,13 @@ class VersementServiceTest {
   private VersementMapper versementMapper;
   private AllocataireMapper allocataireMapper;
   private EnfantMapper enfantMapper;
-  private PDFExporter pdfExporter;
 
-  @BeforeEach
+    @BeforeEach
   public void setUp() {
     versementMapper = Mockito.mock(VersementMapper.class);
     allocataireMapper = Mockito.mock(AllocataireMapper.class);
     enfantMapper = Mockito.mock(EnfantMapper.class);
-    pdfExporter = new PDFExporter(enfantMapper);
+        PDFExporter pdfExporter = new PDFExporter(enfantMapper);
     versementService = new VersementService(versementMapper, allocataireMapper, pdfExporter);
   }
 
