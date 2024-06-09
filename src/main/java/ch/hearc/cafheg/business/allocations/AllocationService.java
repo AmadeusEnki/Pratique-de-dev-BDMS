@@ -1,12 +1,11 @@
 package ch.hearc.cafheg.business.allocations;
 
+import ch.hearc.cafheg.business.versements.VersementService;
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
 import ch.hearc.cafheg.infrastructure.persistance.AllocationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,16 +20,19 @@ public class AllocationService {
 
   private final AllocataireMapper allocataireMapper;
   private final AllocationMapper allocationMapper;
+  private final VersementService versementService;
 
   /**
    * Constructeur pour le service d'allocation.
    *
    * @param allocataireMapper Mapper pour les allocataires.
    * @param allocationMapper  Mapper pour les allocations.
+   * @param versementService  Service pour les versements.
    */
-  public AllocationService(AllocataireMapper allocataireMapper, AllocationMapper allocationMapper) {
+  public AllocationService(AllocataireMapper allocataireMapper, AllocationMapper allocationMapper, VersementService versementService) {
     this.allocataireMapper = allocataireMapper;
     this.allocationMapper = allocationMapper;
+    this.versementService = versementService;
   }
 
   /**
@@ -144,22 +146,19 @@ public class AllocationService {
    * @return Le parent ayant droit à l'allocation basé sur les salaires.
    */
   private String compareSalaries(Famille famille) {
-    BigDecimal salaryThreshold = BigDecimal.valueOf(2000);
-    if (famille.isParent1EstSalarie() || famille.isParent2EstSalarie()) {
-      if (famille.getParent1Salaire().compareTo(salaryThreshold) < 0) {
-        return PARENT_1;
-      }
-      if (famille.getParent2Salaire().compareTo(salaryThreshold) < 0) {
-        return PARENT_2;
-      }
+    if (famille.isParent1EstSalarie() && famille.isParent2EstSalarie()) {
       return famille.getParent1Salaire().compareTo(famille.getParent2Salaire()) > 0 ? PARENT_1 : PARENT_2;
     }
 
-    if (!famille.isParent1EstSalarie() && !famille.isParent2EstSalarie()) {
-      return famille.getParent1Salaire().compareTo(famille.getParent2Salaire()) > 0 ? PARENT_1 : PARENT_2;
+    if (famille.isParent1EstSalarie() && !famille.isParent2EstSalarie()) {
+      return PARENT_1;
     }
 
-    throw new IllegalArgumentException("Impossible de déterminer le parent basé sur les critères de salaire.");
+    if (!famille.isParent1EstSalarie() && famille.isParent2EstSalarie()) {
+      return PARENT_2;
+    }
+
+    return famille.getParent1Salaire().compareTo(famille.getParent2Salaire()) > 0 ? PARENT_1 : PARENT_2;
   }
 
   /**
@@ -195,11 +194,21 @@ public class AllocationService {
    */
   public void deleteAllocataire(int id) {
     logger.debug("Suppression de l'allocataire avec le numéro AVS : {}", id);
+
+    // Récupérer l'allocataire par son ID
     Allocataire allocataire = allocataireMapper.findById(id);
     if (allocataire == null) {
       logger.error("Allocataire non trouvé pour le numéro AVS : {}", id);
       throw new IllegalArgumentException("Allocataire non trouvé");
     }
+
+    // Vérifier si l'allocataire possède des versements
+    if (versementService.hasVersementsForAllocataire(id)) {
+      logger.error("Impossible de supprimer l'allocataire car des versements existent pour le numéro AVS : {}", id);
+      throw new IllegalStateException("Impossible de supprimer l'allocataire car des versements existent");
+    }
+
+    // Supprimer l'allocataire
     allocataireMapper.delete(id);
     logger.info("Allocataire supprimé avec succès : {}", id);
   }

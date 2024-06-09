@@ -75,4 +75,10 @@ public class VersementService {
 
     return pdfExporter.generatePDFAllocataire(allocataire, montantsParEnfant);
   }
+
+  public boolean hasVersementsForAllocataire(long allocataireId) {
+    List<VersementParentParMois> versements = versementMapper.findVersementParentEnfantParMois();
+    return versements.stream().anyMatch(v -> v.getParentId() == allocataireId);
+  }
+
 }

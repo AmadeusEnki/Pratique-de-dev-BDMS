@@ -29,9 +29,9 @@ public class RESTController {
   private final VersementService versementService;
 
   // Constructeur pour initialiser les services nécessaires
-  public RESTController() {
-    this.allocationService = new AllocationService(new AllocataireMapper(), new AllocationMapper());
-    this.versementService = new VersementService(new VersementMapper(), new AllocataireMapper(), new PDFExporter(new EnfantMapper()));
+  public RESTController(AllocataireMapper allocataireMapper, AllocationMapper allocationMapper, VersementMapper versementMapper, EnfantMapper enfantMapper, PDFExporter pdfExporter) {
+    this.allocationService = new AllocationService(allocataireMapper, allocationMapper, new VersementService(versementMapper, allocataireMapper, pdfExporter));
+    this.versementService = new VersementService(versementMapper, allocataireMapper, pdfExporter);
   }
 
   /*
